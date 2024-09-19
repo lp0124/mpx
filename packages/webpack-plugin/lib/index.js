@@ -637,6 +637,7 @@ class MpxWebpackPlugin {
       if (!compilation.__mpx__) {
         // init mpx
         mpx = compilation.__mpx__ = {
+          qmaiConfig: this.options.qmaiConfig || {},
           // 用于使用webpack-virtual-modules功能，目前仅输出web时下支持使用
           __vfs,
           // app信息，便于获取appName
