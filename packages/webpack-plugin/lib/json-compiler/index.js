@@ -209,6 +209,14 @@ module.exports = function (content) {
     }
   }
 
+  if (mpx.qmaiConfig.ttPageNavigationStyleForceDefault) {
+    if (mode === 'tt' && isPage) {
+      json = Object.assign({}, json, {
+        navigationStyle: 'default'
+      })
+    }
+  }
+
   const rulesRunnerOptions = {
     mode,
     srcMode,
