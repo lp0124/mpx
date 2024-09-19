@@ -51,31 +51,31 @@ module.exports = function getComponentConfigs ({ warn, error }) {
    * @return {function(*): Function}
    */
   const print = ({ platform, tag, type = 'property', isError = false }) => (arg) => {
-    if (type === 'tag') {
-      error(`<${arg}> is not supported in ${platform} environment!`)
-      return
-    }
-    let msg
-    switch (type) {
-      case 'event':
-        msg = `<${tag}> does not support [bind${arg}] event in ${platform} environment!`
-        break
-      case 'property':
-        msg = `<${tag}> does not support [${arg && arg.name}] property in ${platform} environment!`
-        break
-      case 'value':
-        msg = `<${tag}>'s property '${arg && arg.name}' does not support '[${arg && arg.value}]' value in ${platform} environment!`
-        break
-      case 'tagRequiredProps':
-        msg = `<${tag}> should have '${arg}' attr in ali environment!`
-        break
-      case 'value-attr-uniform':
-        msg = `The internal attribute name of the <${tag}>'s attribute '${arg && arg.value}' is not supported in the ali environment, Please check!`
-        break
-      default:
-        msg = `<${tag}>'s transform has some error happened!`
-    }
-    isError ? error(msg) : warn(msg)
+    // if (type === 'tag') {
+    //   error(`<${arg}> is not supported in ${platform} environment!`)
+    //   return
+    // }
+    // let msg
+    // switch (type) {
+    //   case 'event':
+    //     msg = `<${tag}> does not support [bind${arg}] event in ${platform} environment!`
+    //     break
+    //   case 'property':
+    //     msg = `<${tag}> does not support [${arg && arg.name}] property in ${platform} environment!`
+    //     break
+    //   case 'value':
+    //     msg = `<${tag}>'s property '${arg && arg.name}' does not support '[${arg && arg.value}]' value in ${platform} environment!`
+    //     break
+    //   case 'tagRequiredProps':
+    //     msg = `<${tag}> should have '${arg}' attr in ali environment!`
+    //     break
+    //   case 'value-attr-uniform':
+    //     msg = `The internal attribute name of the <${tag}>'s attribute '${arg && arg.value}' is not supported in the ali environment, Please check!`
+    //     break
+    //   default:
+    //     msg = `<${tag}>'s transform has some error happened!`
+    // }
+    // isError ? error(msg) : warn(msg)
   }
 
   // 转换规则只需以微信为基准配置微信和支付宝的差异部分，比如微信和支付宝都支持但是写法不一致，或者微信支持而支付宝不支持的部分(抛出错误或警告)
