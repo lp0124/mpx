@@ -47,6 +47,7 @@ module.exports = function (content) {
   const projectRoot = mpx.projectRoot
 
   const isApp = !(pagesMap[resourcePath] || componentsMap[resourcePath])
+  const isPage = !!pagesMap[resourcePath]
   const publicPath = this._compilation.outputOptions.publicPath || ''
   const fs = this._compiler.inputFileSystem
   const runtimeCompile = queryObj.isDynamic
@@ -198,6 +199,14 @@ module.exports = function (content) {
       minPlatformVersion: 1080
     }
     json = Object.assign({}, defaultConf, json)
+  }
+
+  if (mpx.qmaiConfig.wxPageNavigationStyleDefault) {
+    if (mode === 'wx' && isPage) {
+      json = Object.assign({}, {
+        navigationStyle: 'default'
+      }, json)
+    }
   }
 
   const rulesRunnerOptions = {
