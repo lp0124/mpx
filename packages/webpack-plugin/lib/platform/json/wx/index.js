@@ -9,29 +9,29 @@ const mpxViewPath = normalize.lib('runtime/components/ali/mpx-view.mpx')
 const mpxTextPath = normalize.lib('runtime/components/ali/mpx-text.mpx')
 
 module.exports = function getSpec ({ warn, error }) {
-  function print (mode, path, isError) {
-    const msg = `Json path <${path}> is not supported in ${mode} environment!`
-    isError ? error(msg) : warn(msg)
-  }
+  // function print (mode, path, isError) {
+  //   const msg = `Json path <${path}> is not supported in ${mode} environment!`
+  //   isError ? error(msg) : warn(msg)
+  // }
 
   function deletePath (opts) {
-    let isError = opts
-    let shouldLog = true
-    if (typeof opts === 'object') {
-      shouldLog = !opts.noLog
-      isError = opts.isError
-    }
+    // let isError = opts
+    // let shouldLog = true
+    // if (typeof opts === 'object') {
+    //   shouldLog = !opts.noLog
+    //   isError = opts.isError
+    // }
 
-    return function (input, { mode, pathArr = [] }, meta) {
-      const currPath = meta.paths.join('|')
-      if (shouldLog) {
-        print(mode, pathArr.concat(currPath).join('.'), isError)
-      }
-      meta.paths.forEach((path) => {
-        delete input[path]
-      })
-      return input
-    }
+    // return function (input, { mode, pathArr = [] }, meta) {
+    //   const currPath = meta.paths.join('|')
+    //   if (shouldLog) {
+    //     print(mode, pathArr.concat(currPath).join('.'), isError)
+    //   }
+    //   meta.paths.forEach((path) => {
+    //     delete input[path]
+    //   })
+    //   return input
+    // }
   }
 
   /**
