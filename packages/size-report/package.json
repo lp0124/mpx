@@ -32,7 +32,7 @@
     "ws": "^7.4.3"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
+    "registry": "https://hub.qimai.shop/repository/npm-group",
     "access": "public"
   },
   "peerDependencies": {

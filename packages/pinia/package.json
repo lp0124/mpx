@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/didi/mpx#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
+    "registry": "https://hub.qimai.shop/repository/npm-group",
     "access": "public"
   },
   "dependencies": {
