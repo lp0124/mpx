@@ -572,9 +572,11 @@ module.exports = function (content) {
       }
     }
 
-    const processCustomTabBar = (tabBar, context, callback) => {
+    const processCustomTabBar = (json, context, callback) => {
+      const tabBar = json.tabBar
+      const extEnable = json.extEnable
       const outputCustomKey = config[mode].tabBar.customKey
-      if (tabBar && tabBar[outputCustomKey]) {
+      if (extEnable || (tabBar && tabBar[outputCustomKey])) {
         const srcCustomKey = config[srcMode].tabBar.customKey
         const srcPath = resolveTabBarPath(srcCustomKey)
         const outputPath = resolveTabBarPath(outputCustomKey)
@@ -585,11 +587,13 @@ module.exports = function (content) {
           }
         }, (err, entry) => {
           if (err === RESOLVE_IGNORED_ERR) {
-            delete tabBar[srcCustomKey]
+            if (extEnable) delete json.extEnable
+            if (tabBar) delete tabBar[srcCustomKey]
             return callback()
           }
           if (err) return callback(err)
-          tabBar[outputCustomKey] = entry // hack for javascript parser call hook.
+          if (extEnable) json.extEnable = entry
+          if (tabBar) tabBar[outputCustomKey] = entry // hack for javascript parser call hook.
           callback()
         })
       } else {
@@ -689,7 +693,7 @@ module.exports = function (content) {
         processPackages(json.packages, this.context, callback)
       },
       (callback) => {
-        processCustomTabBar(json.tabBar, this.context, callback)
+        processCustomTabBar(json, this.context, callback)
       },
       (callback) => {
         processSubPackages(json.subPackages || json.subpackages, this.context, callback)
