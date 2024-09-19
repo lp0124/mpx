@@ -1,6 +1,9 @@
 import { ENV_OBJ, envError } from '../../../common/js'
 
-const showToast = ENV_OBJ.showToast || envError('showToast')
+function showToast (options = {}) {
+  if (!options.icon) options.icon = 'none'
+  if (options.title) ENV_OBJ.showToast(options)
+}
 
 const hideToast = ENV_OBJ.hideToast || envError('hideToast')
 
