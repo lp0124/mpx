@@ -107,3 +107,6 @@ export * from './api/window'
 
 // getEnterOptionsSync
 export * from './api/lifecycle'
+
+// getExtConfig, getExtConfigSync
+export * from './api/ext'
