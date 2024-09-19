@@ -1,7 +1,6 @@
 const TAG_NAME = 'picker'
 
 module.exports = function ({ print }) {
-  const aliPropLogError = print({ platform: 'ali', tag: TAG_NAME, isError: true })
   const aliPropLog = print({ platform: 'ali', tag: TAG_NAME, isError: false })
   const aliEventLog = print({ platform: 'ali', tag: TAG_NAME, isError: false, type: 'event' })
   const jdPropLog = print({ platform: 'jd', tag: TAG_NAME, isError: true })
@@ -17,12 +16,7 @@ module.exports = function ({ print }) {
     props: [
       {
         test: 'mode',
-        ali (attr) {
-          if (attr.value !== 'selector') {
-            aliPropLogError(attr)
-          }
-          return false
-        }
+        ali: aliPropLog
       },
       {
         test: /^(header-text)$/,
