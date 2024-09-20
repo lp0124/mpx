@@ -111,9 +111,11 @@ let platformGetTagNamespace
 let filePath
 let refId
 let hasI18n = false
+let hasOSS = false
 let i18nInjectableComputed = []
 let hasOptionalChaining = false
 let processingTemplate = false
+let qmaiConfig = {}
 const rulesResultMap = new Map()
 
 function updateForScopesMap () {
@@ -177,6 +179,8 @@ const stringifyWxsPath = '~' + normalize.lib('runtime/stringify.wxs')
 const stringifyModuleName = '__stringify__'
 const optionalChainWxsPath = '~' + normalize.lib('runtime/oc.wxs')
 const optionalChainWxsName = '__oc__'
+const ossWxsPath = `~${normalize.lib('runtime/oss.wxs')}`
+const ossWxsModuleName = '__oss__'
 
 const tagRES = /(\{\{(?:.|\n|\r)+?\}\})(?!})/
 const tagRE = /\{\{((?:.|\n|\r)+?)\}\}(?!})/
@@ -621,11 +625,13 @@ function parse (template, options) {
   i18n = options.i18n
   runtimeCompile = options.runtimeCompile
   platformGetTagNamespace = options.getTagNamespace || no
+  qmaiConfig = options.qmaiConfig || {}
   refId = 0
   injectNodes = []
   forScopes = []
   forScopesMap = {}
   hasI18n = false
+  hasOSS = false
   i18nInjectableComputed = []
   hasOptionalChaining = false
   processingTemplate = false
@@ -782,6 +788,10 @@ function parse (template, options) {
 
   if (hasOptionalChaining) {
     injectWxs(meta, optionalChainWxsName, optionalChainWxsPath)
+  }
+
+  if (qmaiConfig.imgUrlAddOSSSuffix && hasOSS) {
+    injectWxs(meta, ossWxsModuleName, ossWxsPath)
   }
 
   injectNodes.forEach((node) => {
@@ -1705,6 +1715,56 @@ function processRef (el, options, meta) {
   }
 }
 
+function processOss (el) {
+  if (!qmaiConfig.imgUrlAddOSSSuffix) return
+
+  const transform = (el, attribute) => {
+    if (el.attrsMap && el.attrsMap[attribute]) {
+      let value = el.attrsMap[attribute]
+      // 单位为 rpx，即 2 倍图的宽度
+      const width = el.attrsMap.width ? parseInt(el.attrsMap.width, 10) : 0
+      const parsed = parseMustache(el.attrsMap[attribute])
+
+      if (parsed.hasBinding) {
+        value = `{{${ossWxsModuleName}.s(mpxExt, ${parsed.result}, ${width})}}`
+      } else {
+        value = `{{${ossWxsModuleName}.s(mpxExt, '${value}', ${width})}}`
+      }
+
+      el.attrsMap[attribute] = value
+      const srcItem = el.attrsList.find(v => v.name === attribute)
+      srcItem.value = value
+    }
+  }
+
+  if (el.tag === 'image') {
+    hasOSS = true
+    transform(el, 'src')
+  }
+  if (el.tag === 'video') {
+    hasOSS = true
+    transform(el, 'poster')
+  }
+  if (el.tag === 'template') {
+    const attribute = 'data'
+    if (el.attrsMap && el.attrsMap[attribute]) {
+      let value = el.attrsMap[attribute]
+      const parsed = parseMustache(el.attrsMap[attribute])
+      if (parsed.hasBinding) {
+        let result = parsed.result.replace(/^\(|\)$/g, '')
+        if (result[result.length - 1] !== ',') {
+          result += ','
+        }
+        result += ' mpxExt'
+        value = `{{${result}}}`
+      }
+      el.attrsMap[attribute] = value
+      const srcItem = el.attrsList.find(v => v.name === attribute)
+      srcItem.value = value
+    }
+  }
+}
+
 function addWxsModule (meta, module, src) {
   if (!meta.wxsModuleMap) {
     meta.wxsModuleMap = {}
@@ -2565,6 +2625,8 @@ function processElement (el, root, options, meta) {
   }
 
   processAttrs(el, options)
+
+  processOss(el)
 }
 
 function closeElement (el, meta, options) {

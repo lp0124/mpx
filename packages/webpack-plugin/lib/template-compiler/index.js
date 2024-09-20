@@ -77,7 +77,8 @@ module.exports = function (raw) {
     globalComponents: Object.keys(mpx.usingComponents),
     forceProxyEvent: matchCondition(resourcePath, mpx.forceProxyEventRules) || runtimeCompile,
     hasVirtualHost: matchCondition(resourcePath, mpx.autoVirtualHostRules),
-    dynamicTemplateRuleRunner: mpx.dynamicTemplateRuleRunner
+    dynamicTemplateRuleRunner: mpx.dynamicTemplateRuleRunner,
+    qmaiConfig: mpx.qmaiConfig
   })
 
   if (meta.wxsContentMap) {

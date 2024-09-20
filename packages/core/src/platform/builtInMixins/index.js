@@ -13,6 +13,7 @@ import pageRouteMixin from './pageRouteMixin'
 import { dynamicRefsMixin, dynamicRenderHelperMixin, dynamicSlotMixin } from '../../dynamic/dynamicRenderMixin.empty'
 import styleHelperMixin from './styleHelperMixin'
 import directiveHelperMixin from './directiveHelperMixin'
+import extendFieldMixin from './extendFieldMixin'
 
 export default function getBuiltInMixins (options, type) {
   let bulitInMixins
@@ -53,7 +54,8 @@ export default function getBuiltInMixins (options, type) {
         i18nMixin(),
         dynamicRenderHelperMixin(),
         dynamicSlotMixin(),
-        dynamicRefsMixin()
+        dynamicRefsMixin(),
+        extendFieldMixin(type)
       ])
     }
   }
